@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+  title: Social Posts Manager API
+  description: API for managing posts, user authentication, and interactions.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:4000
+    description: Local server
+
+tags:
+  - name: Authentication
+    description: Endpoints related to user authentication
+  - name: Posts
+    description: Endpoints for managing posts and user interactions
+  - name: Health Check
+    description: Endpoint for checking the API health status
+
+paths:
+  /api/v1/health:
+    get:
+      tags:
+        - Health Check
+      summary: Check API health status
+      operationId: getStatus
+      responses:
+        "200":
+          description: API is running and healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
+
+  /api/v1/auth/register:
+    post:
+      tags:
+        - Authentication
+      summary: Register a new user
+      operationId: registerUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RegisterUser"
+      responses:
+        "201":
+          description: User registered successfully
+
+  /api/v1/auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: User login
+      operationId: loginUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LoginUser"
+      responses:
+        "200":
+          description: Successfully logged in
+
+  /api/v1/posts:
+    get:
+      tags:
+        - Posts
+      summary: Get all posts
+      operationId: getAllPosts
+      responses:
+        "200":
+          description: Successfully retrieved posts
+
+    post:
+      tags:
+        - Posts
+      summary: Create a new post
+      operationId: createPost
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Post"
+      responses:
+        "201":
+          description: Post created successfully
+
+  /api/v1/posts/{id}/like:
+    put:
+      tags:
+        - Posts
+      summary: Like or Unlike a post
+      operationId: likePost
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Post liked/unliked
+
+components:
+  schemas:
+    RegisterUser:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    LoginUser:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    Post:
+      type: object
+      properties:
+        title:
+          type: string
+        body:
+          type: string

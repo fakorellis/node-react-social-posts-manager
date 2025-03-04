@@ -1,0 +1,43 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug TypeScript",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "node",
+        "args": [
+          "--loader=ts-node/esm",
+          "--no-warnings",
+          "./src/index.ts"
+        ],
+        "cwd": "${workspaceFolder}/server",
+        "outFiles": ["${workspaceFolder}/server/src/**/*.js"],
+        "restart": true,
+        "sourceMaps": true,
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      },
+      {
+        "name": "Debug with ts-node-dev",
+        "type": "node",
+        "request": "launch",
+        "runtimeExecutable": "npx",
+        "args": ["ts-node-dev", "--respawn", "--transpile-only", "./src/index.ts"],
+        "cwd": "${workspaceFolder}/server",
+        "outFiles": ["${workspaceFolder}/server/src/**/*.js"],
+        "restart": true,
+        "sourceMaps": true,
+        "console": "integratedTerminal",
+        "internalConsoleOptions": "neverOpen"
+      },
+      {
+        "name": "Attach to Process",
+        "type": "node",
+        "request": "attach",
+        "processId": "${command:PickProcess}",
+        "restart": true
+      }
+    ]
+  }
+  
