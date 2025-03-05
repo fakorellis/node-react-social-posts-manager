@@ -75,15 +75,44 @@ paths:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
 
-#   /api/v1/posts:
-#     get:
-#       tags:
-#         - Posts
-#       summary: Get all posts
-#       operationId: getAllPosts
-#       responses:
-#         "200":
-#           description: Successfully retrieved posts
+  /api/v1/posts:
+    get:
+      tags:
+        - Posts
+      summary: Get paginated posts
+      operationId: getPostsPaginated
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Successfully retrieved paginated posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Post"
+                  totalPosts:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  currentPage:
+                    type: integer
+
 
 #     post:
 #       tags:
@@ -164,7 +193,6 @@ components:
       required:
         - title
         - body
-        - author
       properties:
         title:
           type: string
@@ -172,10 +200,6 @@ components:
         body:
           type: string
           example: "This is the content of my first post."
-        author:
-          type: string
-          description: The username of the author
-          example: "johndoe"
         createdAt:
           type: string
           format: date-time

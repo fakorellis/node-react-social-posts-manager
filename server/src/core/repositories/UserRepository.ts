@@ -15,7 +15,7 @@ class UserRepository {
       Logger.log(LogLevel.INFO, `User created: ${user.username}`)
       return user.toObject()
     } catch (error) {
-      Logger.log(LogLevel.ERROR, `❌ Error creating user: ${error.message}`, 'ERR_CREATE_USER', 500)
+      Logger.log(LogLevel.ERROR, `❌ Error creating user: ${error.message}`)
       throw error
     }
   }

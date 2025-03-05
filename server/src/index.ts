@@ -5,6 +5,7 @@ import cors from 'cors'
 import helmet from 'helmet'
 import OpenApiService from './services/openapi/OpenApiService'
 import MongoDBService from './services/mongodb/MongoDBService'
+import PostService from './core/services/PostService'
 import Logger from './services/logger'
 import { LogLevel } from './core/enums'
 
@@ -23,6 +24,7 @@ async function startServer() {
   try {
     middlewares.forEach((m) => app.use(m))
     await MongoDBService.connect()
+    await PostService.fetchPostsFromApi()
     OpenApiService.setupRoutes(app)
     OpenApiService.setupSwaggerDocs(app)
 
