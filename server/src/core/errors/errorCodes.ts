@@ -51,5 +51,11 @@ export default {
     userTitle: 'Missing Required Fields',
     userMessage: 'Post title and body are required.',
     technicalDescription: 'Either the post title or body is missing.'
+  },
+  POST_NOT_FOUND: {
+    code: `${Post}0002`,
+    userTitle: "Post Not Found",
+    userMessage: "The requested post does not exist.",
+    technicalDescription: "The post ID provided does not match any post in the database.",
   }
 }

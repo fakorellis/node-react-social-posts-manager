@@ -78,7 +78,7 @@ class OpenApiService {
   }
 
   /**
-   * ✅ Sets up Swagger UI documentation.
+   * Sets up Swagger UI documentation.
    */
   static setupSwaggerDocs(app: express.Application) {
     const openApiPath = path.join(__dirname, '../../api/openapi.yaml')

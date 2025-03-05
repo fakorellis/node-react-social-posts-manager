@@ -149,22 +149,76 @@ paths:
                   data:
                     $ref: "#/components/schemas/Post"
 
+  /api/v1/users/me/posts/{id}/like:
+    put:
+      tags:
+        - Posts
+      summary: Like or Unlike a post
+      operationId: likePost
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The ID of the post to like or unlike
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Bearer your-jwt-token-here"
+      responses:
+        "200":
+          description: Successful operation
+        "401":
+          description: Unauthorized, token missing or invalid
+        "404":
+          description: Post not found
 
-#   /api/v1/posts/{id}/like:
-#     put:
-#       tags:
-#         - Posts
-#       summary: Like or Unlike a post
-#       operationId: likePost
-#       parameters:
-#         - name: id
-#           in: path
-#           required: true
-#           schema:
-#             type: string
-#       responses:
-#         "200":
-#           description: Post liked/unliked
+  /api/v1/users/me/liked-posts:
+    get:
+      tags:
+        - Posts
+      summary: Get paginated liked posts of the authenticated user
+      operationId: getUserLikedPosts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Successfully retrieved liked posts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  posts:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Post"
+                  totalItems:
+                    type: integer
+                  totalPages:
+                    type: integer
+                  currentPage:
+                    type: integer
+        "401":
+          description: Unauthorized, token missing or invalid
 
 components:
   schemas:

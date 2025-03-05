@@ -65,6 +65,20 @@ class PostService {
     }
     return PostRepository.createPost(postData)
   }
+
+  /**
+   * Finds a post by ID or throws an error if not found.
+   * @param postId - The ID of the post.
+   * @returns The post document.
+   * @throws ValidationError if the post does not exist.
+   */
+  static async findPostByIdOrThrowError(postId: string): Promise<Post> {
+    const post = await PostRepository.findPostById(postId)
+    if (!post) {
+      throw new ValidationError(ErrorCodes.POST_NOT_FOUND)
+    }
+    return post
+  }
 }
 
 export default PostService

@@ -58,6 +58,15 @@ class PostRepository {
       currentPage: page
     }
   }
+
+  /**
+   * Finds a post by its ID.
+   * @param postId - The ID of the post.
+   * @returns The post document or null if not found.
+   */
+  static async findPostById(postId: string): Promise<Post | null> {
+    return PostModel.findById(postId).lean()
+  }
 }
 
 export default PostRepository
