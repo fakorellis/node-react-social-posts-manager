@@ -1,5 +1,6 @@
 const Generic = 'GEN'
 const User = 'USER'
+const Post = 'POST'
 
 export default {
   GENERIC_ERROR: {
@@ -34,14 +35,21 @@ export default {
   },
   INVALID_EMAIL: {
     code: `${User}0005`,
-    userTitle: "Invalid Email",
-    userMessage: "Please provide a valid email address.",
-    technicalDescription: "The email format provided is incorrect.",
+    userTitle: 'Invalid Email',
+    userMessage: 'Please provide a valid email address.',
+    technicalDescription: 'The email format provided is incorrect.'
   },
   WEAK_PASSWORD: {
     code: `${User}0006`,
-    userTitle: "Weak Password",
-    userMessage: "Password must be at least 8 characters long, contain uppercase, lowercase, a number, and a special character.",
-    technicalDescription: "The provided password does not meet security requirements.",
+    userTitle: 'Weak Password',
+    userMessage:
+      'Password must be at least 8 characters long, contain uppercase, lowercase, a number, and a special character.',
+    technicalDescription: 'The provided password does not meet security requirements.'
   },
+  MISSING_POST_FIELDS: {
+    code: `${Post}0001`,
+    userTitle: 'Missing Required Fields',
+    userMessage: 'Post title and body are required.',
+    technicalDescription: 'Either the post title or body is missing.'
+  }
 }

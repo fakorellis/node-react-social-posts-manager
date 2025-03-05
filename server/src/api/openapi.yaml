@@ -113,21 +113,42 @@ paths:
                   currentPage:
                     type: integer
 
+    post:
+      tags:
+        - Posts
+      summary: Create a new post
+      operationId: createPost
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Bearer your-jwt-token-here"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                body:
+                  type: string
+      responses:
+        "201":
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: "#/components/schemas/Post"
 
-#     post:
-#       tags:
-#         - Posts
-#       summary: Create a new post
-#       operationId: createPost
-#       requestBody:
-#         required: true
-#         content:
-#           application/json:
-#             schema:
-#               $ref: "#/components/schemas/Post"
-#       responses:
-#         "201":
-#           description: Post created successfully
 
 #   /api/v1/posts/{id}/like:
 #     put:

@@ -1,7 +1,11 @@
 import axios from 'axios'
+import { isEmpty, trim } from 'lodash'
+
 import PostRepository from '../repositories/PostRepository'
 import Logger from '../../services/logger'
 import { LogLevel } from '../enums'
+import ErrorCodes from '../errors/errorCodes'
+import ValidationError from '../errors/ValidationError'
 
 /**
  * Service for managing post-related business logic.
@@ -39,6 +43,27 @@ class PostService {
    */
   static async getPostsPaginated(page: number, limit: number) {
     return await PostRepository.getPostsPaginated(page, limit)
+  }
+
+  /**
+   * Creates a new post and saves it in the database.
+   * @param postData - Object containing post details.
+   * @returns The created post.
+   */
+  static async createPost(user: User, postRequest: Post): Promise<Post> {
+    const title = trim(postRequest.title)
+    const body = trim(postRequest.body)
+
+    // Validate that title and body are not empty
+    if (isEmpty(title) || isEmpty(body)) {
+      throw new ValidationError(ErrorCodes.MISSING_POST_FIELDS)
+    }
+
+    const postData: Post = {
+      ...postRequest,
+      userId: user._id
+    }
+    return PostRepository.createPost(postData)
   }
 }
 

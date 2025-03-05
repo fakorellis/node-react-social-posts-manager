@@ -6,11 +6,7 @@ declare namespace ApiResponse {
     headers?: object
   }
 
-  type PaginatedResponse<T> = {
+  type PaginatedResponse<T> = PaginationResponse & {
     status: import('../core/enums').HttpStatus
-    data: T
-    totalItems: number
-    totalPages: number
-    currentPage: number
   }
 }

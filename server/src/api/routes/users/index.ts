@@ -1,15 +1,17 @@
 import { HttpStatus } from '../../../core/enums'
 import UserService from '../../../core/services/UserService'
+import UserTransformer from '../../../core/transformers/UserTransformer'
 
 /**
  * Handler for user registration
  */
 async function registerUserHandler(req: Express.ExpressRequest) {
   const newUser = await UserService.registerUser(req.body)
+  const data = UserTransformer.getView(newUser)
 
   return {
     status: HttpStatus.CREATED,
-    data: newUser
+    data
   }
 }
 
