@@ -66,70 +66,121 @@ paths:
       responses:
         "200":
           description: Successfully logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
 
-  /api/v1/posts:
-    get:
-      tags:
-        - Posts
-      summary: Get all posts
-      operationId: getAllPosts
-      responses:
-        "200":
-          description: Successfully retrieved posts
+#   /api/v1/posts:
+#     get:
+#       tags:
+#         - Posts
+#       summary: Get all posts
+#       operationId: getAllPosts
+#       responses:
+#         "200":
+#           description: Successfully retrieved posts
 
-    post:
-      tags:
-        - Posts
-      summary: Create a new post
-      operationId: createPost
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Post"
-      responses:
-        "201":
-          description: Post created successfully
+#     post:
+#       tags:
+#         - Posts
+#       summary: Create a new post
+#       operationId: createPost
+#       requestBody:
+#         required: true
+#         content:
+#           application/json:
+#             schema:
+#               $ref: "#/components/schemas/Post"
+#       responses:
+#         "201":
+#           description: Post created successfully
 
-  /api/v1/posts/{id}/like:
-    put:
-      tags:
-        - Posts
-      summary: Like or Unlike a post
-      operationId: likePost
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Post liked/unliked
+#   /api/v1/posts/{id}/like:
+#     put:
+#       tags:
+#         - Posts
+#       summary: Like or Unlike a post
+#       operationId: likePost
+#       parameters:
+#         - name: id
+#           in: path
+#           required: true
+#           schema:
+#             type: string
+#       responses:
+#         "200":
+#           description: Post liked/unliked
 
 components:
   schemas:
     RegisterUser:
       type: object
+      required:
+        - email
+        - password
+        - firstName
+        - lastName
+        - username
       properties:
-        username:
+        email:
           type: string
+          format: email
+          example: "john.doe@example.com"
         password:
           type: string
+          format: password
+          example: "strongpassword123"
+        firstName:
+          type: string
+          example: "John"
+        lastName:
+          type: string
+          example: "Doe"
+        username:
+          type: string
+          example: "johndoe"
 
     LoginUser:
       type: object
+      required:
+        - username
+        - password
       properties:
         username:
           type: string
+          example: "johndoe"
         password:
           type: string
+          format: password
+          example: "strongpassword123"
 
     Post:
       type: object
+      required:
+        - title
+        - body
+        - author
       properties:
         title:
           type: string
+          example: "My First Post"
         body:
           type: string
+          example: "This is the content of my first post."
+        author:
+          type: string
+          description: The username of the author
+          example: "johndoe"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2025-03-01T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2025-03-02T15:30:00Z"

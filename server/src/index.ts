@@ -1,8 +1,10 @@
 import express, { Express } from 'express'
+import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import helmet from 'helmet'
-import initOpenApi from './services/openapi/OpenApiService'
+import OpenApiService from './services/openapi/OpenApiService'
+import MongoDBService from './services/mongodb/MongoDBService'
 import Logger from './services/logger'
 import { LogLevel } from './core/enums'
 
@@ -14,20 +16,29 @@ const app: Express = express()
 app.use(express.json())
 app.use(cors())
 app.use(helmet())
-const middlewares = []
+const middlewares = [bodyParser.json({ limit: '50mb' })]
 
 // Initialize OpenAPI Service (loads routes dynamically)
 async function startServer() {
   try {
     middlewares.forEach((m) => app.use(m))
-    await initOpenApi(app)
+    await MongoDBService.connect()
+    OpenApiService.setupRoutes(app)
+    OpenApiService.setupSwaggerDocs(app)
 
     const PORT = process.env.PORT || 4000
     app.listen(PORT, () => {
       Logger.log(LogLevel.INFO, `🚀 Server is running on http://localhost:${PORT}/api/v1`)
     })
+
+    // Graceful shutdown
+    process.on('SIGINT', async () => {
+      Logger.log(LogLevel.INFO, '🛑 Gracefully shutting down...')
+      await MongoDBService.disconnect()
+      process.exit(0)
+    })
   } catch (error) {
-    Logger.log(LogLevel.ERROR, 'Failed to start server', 'ERR_SERVER_START', 500)
+    Logger.log(LogLevel.ERROR, '❌ Failed to start server', 'ERR_SERVER_START', 500)
     process.exit(1)
   }
 }
