@@ -14,7 +14,7 @@ import { LogLevel } from './core/enums'
 dotenv.config()
 
 // Initialize Express app
-const app: Express = express()
+export const app: Express = express()
 app.use(express.json())
 app.use(cors())
 app.use(helmet())
