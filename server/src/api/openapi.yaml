@@ -126,6 +126,12 @@ paths:
           schema:
             type: integer
             default: 10
+        - name: search
+          in: query
+          required: false
+          schema:
+            type: string
+            description: "Search term for filtering posts by title or body"
       responses:
         "200":
           description: Successfully retrieved paginated posts

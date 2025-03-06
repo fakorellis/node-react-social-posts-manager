@@ -44,12 +44,19 @@ class PostRepository {
    * Retrieves posts with pagination.
    * @param page - Page number (default: 1).
    * @param limit - Number of posts per page (default: 20).
+   * @param searchQuery - Search term for filtering posts by title or body.
    * @returns Paginated posts along with total count.
    */
-  static async getPostsPaginated(page = 1, limit = 20): Promise<PaginationResponse<Post[]>> {
+  static async getPostsPaginated(page = 1, limit = 20, searchQuery?: string): Promise<PaginationResponse<Post[]>> {
     const skip = (page - 1) * limit
-    const posts = <Post[]>await PostModel.find().skip(skip).limit(limit).lean()
-    const totalPosts = await PostModel.countDocuments()
+
+    // Construct search filter if query is provided
+    const searchFilter = searchQuery
+      ? { $or: [{ title: { $regex: searchQuery, $options: 'i' } }, { body: { $regex: searchQuery, $options: 'i' } }] }
+      : {}
+
+    const posts = <Post[]>await PostModel.find(searchFilter).skip(skip).limit(limit).lean()
+    const totalPosts = await PostModel.countDocuments(searchFilter)
 
     return {
       data: posts,

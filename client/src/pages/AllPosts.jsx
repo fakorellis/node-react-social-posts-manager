@@ -1,16 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Col } from "reactstrap";
+import { Row, Col, FormGroup, Input, Button } from "reactstrap";
 import PostList from "../components/PostList";
 import PaginationControls from "../components/PaginationControls";
 
 const fetchPosts = async ({ queryKey }) => {
-  const [, page] = queryKey;
+  const [, page, searchTerm] = queryKey;
   const token = localStorage.getItem("token");
 
   const { data } = await axios.get("http://localhost:4000/api/v1/posts", {
-    params: { page, limit: 5 },
+    params: { page, limit: 5, search: searchTerm || "" },
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -29,14 +29,25 @@ const likePost = async (postId) => {
 
 const AllPosts = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState(""); // Search state
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(""); // Debounced search term
   const queryClient = useQueryClient();
+
+  // Debounce search input (delays API request)
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500); // Delay API call by 500ms
+
+    return () => clearTimeout(handler);
+  }, [searchTerm]);
 
   const {
     data: postsResponse,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["posts", currentPage],
+    queryKey: ["posts", currentPage, debouncedSearchTerm],
     queryFn: fetchPosts,
     keepPreviousData: true,
   });
@@ -44,7 +55,7 @@ const AllPosts = () => {
   const mutation = useMutation({
     mutationFn: likePost,
     onSuccess: (_, postId) => {
-      queryClient.setQueryData(["posts", currentPage], (oldData) => {
+      queryClient.setQueryData(["posts", currentPage, debouncedSearchTerm], (oldData) => {
         if (!oldData) return oldData;
 
         return {
@@ -70,6 +81,28 @@ const AllPosts = () => {
   return (
     <Col md={9}>
       <h2 className="mt-4 mb-4">Posts</h2>
+
+      {/* Search Bar */}
+      <Row className="mb-4">
+        <Col md={8}>
+          <FormGroup>
+            <Input
+              type="text"
+              placeholder="Search posts..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </FormGroup>
+        </Col>
+        <Col md={4}>
+          <Button
+            color="primary"
+            onClick={() => setDebouncedSearchTerm(searchTerm)}
+          >
+            Search
+          </Button>
+        </Col>
+      </Row>
 
       <PostList posts={postsResponse.data} handleLike={handleLike} />
 

@@ -39,10 +39,11 @@ class PostService {
    * Retrieves posts with pagination.
    * @param page - Page number.
    * @param limit - Number of posts per page.
+   * @param searchQuery - Search term for filtering posts by title or body.
    * @returns Paginated posts.
    */
-  static async getPostsPaginated(page: number, limit: number) {
-    return await PostRepository.getPostsPaginated(page, limit)
+  static async getPostsPaginated(page: number, limit: number, searchQuery?: string) {
+    return PostRepository.getPostsPaginated(page, limit, searchQuery)
   }
 
   /**

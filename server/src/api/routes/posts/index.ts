@@ -13,8 +13,9 @@ async function getPostsPaginatedHandler(
   const userId = req.user?._id
   const page = parseInt(req.query.page as string) || 1
   const limit = parseInt(req.query.limit as string) || 10
+  const searchQuery = req.query.search as string
 
-  const paginatedPosts = await PostService.getPostsPaginated(page, limit)
+  const paginatedPosts = await PostService.getPostsPaginated(page, limit, searchQuery)
   const data = await PostTransformer.getViewListWithLikeStatus(userId, paginatedPosts.data)
 
   return {
