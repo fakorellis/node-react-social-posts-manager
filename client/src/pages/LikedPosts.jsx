@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Container, Row, Col, Button } from "reactstrap";
-import Navigation from "../components/Navigation";
+import { Col, Button } from "reactstrap";
 import PostList from "../components/PostList";
 import PaginationControls from "../components/PaginationControls";
 
@@ -99,35 +98,27 @@ const LikedPosts = () => {
     );
 
   return (
-    <Container fluid>
-      <Row>
-        <Col md={3}>
-          <Navigation />
-        </Col>
+    <Col md={9}>
+      <h2 className="mt-4 mb-4">Liked Posts</h2>
+      {postsResponse.data.length > 0 && (
+        <Button className="mb-4" color="danger" onClick={handleUnlikeAll}>
+          {unlikeAllMutation.isLoading ? "Unliking..." : "Unlike All"}
+        </Button>
+      )}
 
-        <Col md={9}>
-          <h2 className="mt-4 mb-4">Liked Posts</h2>
-          {postsResponse.data.length > 0 && (
-            <Button className="mb-4" color="danger" onClick={handleUnlikeAll}>
-              {unlikeAllMutation.isLoading ? "Unliking..." : "Unlike All"}
-            </Button>
-          )}
-
-          {postsResponse.data.length === 0 ? (
-            <p className="text-center mt-4">No liked posts yet.</p>
-          ) : (
-            <>
-              <PostList posts={postsResponse.data} handleLike={handleLike} />
-              <PaginationControls
-                currentPage={currentPage}
-                totalPages={postsResponse.totalPages}
-                setCurrentPage={setCurrentPage}
-              />
-            </>
-          )}
-        </Col>
-      </Row>
-    </Container>
+      {postsResponse.data.length === 0 ? (
+        <p className="text-center mt-4">No liked posts yet.</p>
+      ) : (
+        <>
+          <PostList posts={postsResponse.data} handleLike={handleLike} />
+          <PaginationControls
+            currentPage={currentPage}
+            totalPages={postsResponse.totalPages}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
+    </Col>
   );
 };
 

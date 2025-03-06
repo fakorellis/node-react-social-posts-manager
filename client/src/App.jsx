@@ -1,12 +1,14 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Container } from "reactstrap";
 import { AuthProvider } from "./context/AuthContext.jsx";
+import DashboardLayout from "./layout/DashboardLayout.jsx";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/SignUp";
 import AllPosts from "./pages/AllPosts.jsx";
 import LikedPosts from "./pages/LikedPosts.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CreatePost from "./pages/CreatePost.jsx";
 
 function App() {
   return (
@@ -22,7 +24,9 @@ function App() {
               path="/posts"
               element={
                 <ProtectedRoute>
-                  <AllPosts />
+                  <DashboardLayout>
+                    <AllPosts />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
@@ -30,7 +34,19 @@ function App() {
               path="/liked-posts"
               element={
                 <ProtectedRoute>
-                  <LikedPosts />
+                  <DashboardLayout>
+                    <LikedPosts />
+                  </DashboardLayout>
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/create-post"
+              element={
+                <ProtectedRoute>
+                  <DashboardLayout>
+                    <CreatePost />
+                  </DashboardLayout>
                 </ProtectedRoute>
               }
             />
