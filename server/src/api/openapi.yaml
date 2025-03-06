@@ -105,7 +105,15 @@ paths:
         - Posts
       summary: Get paginated posts
       operationId: getPostsPaginated
+      security:
+        - bearerAuth: []
       parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Bearer your-jwt-token-here"
         - name: page
           in: query
           required: false
@@ -243,7 +251,25 @@ paths:
                     type: integer
         "401":
           description: Unauthorized, token missing or invalid
-
+    delete:
+      tags:
+        - Posts
+      summary: Remove all liked posts of the authenticated user
+      operationId: unlikeAllPosts
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Bearer your-jwt-token-here"
+      responses:
+        "204":
+          description: No Content - All liked posts removed successfully
+        "401":
+          description: Unauthorized, token missing or invalid
 components:
   schemas:
     UserResponse:
@@ -307,3 +333,6 @@ components:
           type: string
           format: date-time
           example: "2025-03-02T15:30:00Z"
+        isLiked:
+          type: boolean
+          example: true

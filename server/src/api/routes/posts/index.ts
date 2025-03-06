@@ -10,11 +10,12 @@ import AuthMiddlewareService from '../../middlewares/AuthMiddlewareService'
 async function getPostsPaginatedHandler(
   req: Express.ExpressRequest
 ): Promise<ApiResponse.PaginatedResponse<PostResource[]>> {
+  const userId = req.user?._id
   const page = parseInt(req.query.page as string) || 1
   const limit = parseInt(req.query.limit as string) || 10
 
   const paginatedPosts = await PostService.getPostsPaginated(page, limit)
-  const data = PostTransformer.getViewList(paginatedPosts.data)
+  const data = await PostTransformer.getViewListWithLikeStatus(userId, paginatedPosts.data)
 
   return {
     status: HttpStatus.OK,
@@ -70,11 +71,19 @@ async function likePostHandler(req: Express.ExpressRequest): Promise<{ status: H
   return { status: HttpStatus.OK }
 }
 
+/**
+ * Handles the deletion of al liked posts of a user.
+ */
+async function unlikeAllPostsHandler(req: Express.ExpressRequest): Promise<ApiResponse.Response<void>> {
+  await LikeService.unlikeAllPosts(req.user._id)
+  return { status: HttpStatus.NO_CONTENT }
+}
+
 export default {
   getPostsPaginated: {
     name: 'getPostsPaginated',
     handler: getPostsPaginatedHandler,
-    preOperationMiddlewares: []
+    preOperationMiddlewares: [AuthMiddlewareService.isAuthenticated]
   },
   createPost: {
     name: 'createPost',
@@ -89,6 +98,11 @@ export default {
   likePost: {
     name: 'likePost',
     handler: likePostHandler,
+    preOperationMiddlewares: [AuthMiddlewareService.isAuthenticated]
+  },
+  unlikeAllPosts: {
+    name: 'unlikeAllPosts',
+    handler: unlikeAllPostsHandler,
     preOperationMiddlewares: [AuthMiddlewareService.isAuthenticated]
   }
 }

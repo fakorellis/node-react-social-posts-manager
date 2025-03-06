@@ -25,6 +25,15 @@ class LikeService {
   }
 
   /**
+   * Removes all liked posts for a user.
+   */
+  @CacheClear({
+    hashKey: HashKey.USER_GET_LIKED_POSTS
+  })
+  static async unlikeAllPosts(userId: string): Promise<void> {
+    await LikeRepository.deleteByCriteria({ userId })
+  }
+  /**
    * Gets all liked posts of a user (with pagination).
    */
   @Cacheable({

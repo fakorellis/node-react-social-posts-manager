@@ -62,6 +62,30 @@ class LikeRepository {
       currentPage: page
     }
   }
+
+  /**
+   * Retrieves liked post IDs for a given user.
+   * @param userId - The ID of the authenticated user.
+   * @param postIds - Array of post IDs to check.
+   * @returns A Set of post IDs that are liked.
+   */
+  static async checkIfPostsAreLiked(userId: string, postIds: string[]): Promise<Set<string>> {
+    const likedPosts = await LikeModel.find({
+      userId: userId,
+      postId: { $in: postIds }
+    }).select('postId')
+
+    return new Set(likedPosts.map((like) => like.postId.toString()))
+  }
+
+  /**
+   * Removes likes based on criteria.
+   * @param criteria - The filter conditions for deleting likes.
+   */
+  static async deleteByCriteria(criteria: Record<string, any>): Promise<void> {
+    await LikeModel.deleteMany(criteria)
+    Logger.log(LogLevel.INFO, `Likes deleted for criteria: ${JSON.stringify(criteria)}`)
+  }
 }
 
 export default LikeRepository
