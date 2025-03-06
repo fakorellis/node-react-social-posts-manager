@@ -1,6 +1,7 @@
 import { HttpStatus } from '../../../core/enums'
 import UserService from '../../../core/services/UserService'
 import UserTransformer from '../../../core/transformers/UserTransformer'
+import AuthMiddlewareService from '../../middlewares/AuthMiddlewareService'
 
 /**
  * Handler for user registration
@@ -28,6 +29,19 @@ async function loginUserHandler(req: Express.ExpressRequest) {
   }
 }
 
+/**
+ * Returns the authenticated user's profile.
+ */
+async function getUserProfileHandler(req: Express.ExpressRequest) {
+  const user = await UserService.getUserById(req.user._id)
+  const data = UserTransformer.getView(user)
+
+  return {
+    status: HttpStatus.OK,
+    data
+  }
+}
+
 export default {
   registerUser: {
     name: 'registerUser',
@@ -38,5 +52,10 @@ export default {
     name: 'loginUser',
     handler: loginUserHandler,
     preOperationMiddlewares: []
+  },
+  getUserProfile: {
+    name: 'getUserProfile',
+    handler: getUserProfileHandler,
+    preOperationMiddlewares: [AuthMiddlewareService.isAuthenticated],
   }
 }

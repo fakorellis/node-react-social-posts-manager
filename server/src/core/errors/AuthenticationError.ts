@@ -1,10 +1,14 @@
-export default class AuthenticationError extends Error {
-  message: string
+import AbstractHttpError from './AbstractHttpError'
 
-  constructor(message: string) {
-    super(message)
-    Error.call(this)
-    this.message = message
+export default class AuthenticationError extends AbstractHttpError {
+  errorCode: string
+  params?: any
+
+  constructor(errorCode, params?) {
+    super(errorCode?.userMessage || errorCode?.userTitle)
+    this.name = this.constructor.name
+    this.errorCode = errorCode
+    this.params = params
     Object.setPrototypeOf(this, AuthenticationError.prototype)
   }
 }

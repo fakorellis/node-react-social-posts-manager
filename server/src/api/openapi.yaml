@@ -46,7 +46,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RegisterUser"
+              $ref: "#/components/schemas/UserResponse"
       responses:
         "201":
           description: User registered successfully
@@ -74,6 +74,30 @@ paths:
                   token:
                     type: string
                     example: "eyJhbGciOiJIUzI1NiIsInR5cCI6..."
+  /api/v1/users/me:
+    get:
+      tags:
+        - Authentication
+      summary: Get the authenticated user's profile
+      operationId: getUserProfile
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            example: "Bearer your-jwt-token-here"
+      responses:
+        "200":
+          description: Successfully retrieved user profile
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "401":
+          description: Unauthorized, token missing or invalid
 
   /api/v1/posts:
     get:
@@ -222,7 +246,7 @@ paths:
 
 components:
   schemas:
-    RegisterUser:
+    UserResponse:
       type: object
       required:
         - email

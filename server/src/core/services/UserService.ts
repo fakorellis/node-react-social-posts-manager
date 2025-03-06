@@ -6,6 +6,9 @@ import UserUtils from './utils/UserUtils'
 import JwtService from '../../services/jwt/JwtService'
 import ValidationError from '../errors/ValidationError'
 import ErrorCodes from '../errors/errorCodes'
+import BadRequestError from '../errors/BadRequestError'
+import AuthenticationError from '../errors/AuthenticationError'
+import ResourceNotFoundError from '../errors/ResourceNotFoundError'
 
 class UserService {
   /**
@@ -48,16 +51,16 @@ class UserService {
    */
   static async loginUser(userData: UserLoginRequest): Promise<{ token: string }> {
     const { username, password } = userData
-    
+
     const user = await UserRepository.getUserByUsername(username)
     if (!user) {
-      throw new ValidationError(ErrorCodes.USER_NOT_FOUND)
+      throw new AuthenticationError(ErrorCodes.USER_NOT_FOUND)
     }
 
     // Compare passwords using bcrypt
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if (!isPasswordValid) {
-      throw new ValidationError(ErrorCodes.INVALID_CREDENTIALS)
+      throw new AuthenticationError(ErrorCodes.INVALID_CREDENTIALS)
     }
 
     // Generate JWT token
@@ -65,6 +68,19 @@ class UserService {
 
     Logger.log(LogLevel.INFO, `User logged in: ${user.username}`)
     return { token }
+  }
+
+  /**
+   * Retrieves a user by their ID.
+   * @param {string} userId - The ID of the user.
+   * @returns {Promise<User>}
+   */
+  static async getUserById(userId): Promise<User> {
+    const user = await UserRepository.getUserById(userId)
+    if (!user) {
+      throw new ResourceNotFoundError(ErrorCodes.USER_NOT_FOUND)
+    }
+    return user
   }
 }
 
