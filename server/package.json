@@ -9,9 +9,7 @@
         "build": "tsc",
         "lint": "eslint . --ext .ts",
         "format": "prettier --write .",
-        "test": "jest --coverage",
-        "docker:build": "docker build -t social-posts-manager .",
-        "docker:run": "docker-compose up --build"
+        "test": "jest --coverage"
     },
     "dependencies": {
         "@type-cacheable/core": "^14.1.0",

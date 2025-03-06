@@ -43,6 +43,7 @@ async function startServer() {
     })
   } catch (error) {
     Logger.log(LogLevel.ERROR, '❌ Failed to start server', 'ERR_SERVER_START', 500)
+    Logger.log(LogLevel.ERROR, error)
     process.exit(1)
   }
 }

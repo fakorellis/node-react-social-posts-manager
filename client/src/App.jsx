@@ -4,7 +4,7 @@ import { AuthProvider } from "./context/AuthContext.jsx";
 import DashboardLayout from "./layout/DashboardLayout.jsx";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Signup from "./pages/SignUp";
+import Signup from "./pages/Signup";
 import AllPosts from "./pages/AllPosts.jsx";
 import LikedPosts from "./pages/LikedPosts.jsx";
 import ProtectedRoute from "./components/ProtectedRoute";

@@ -26,7 +26,7 @@ class MongoDBService {
       return MongoDBService.connection
     }
 
-    const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/social-posts-manager'
+    const mongoUri = 'mongodb://mongo:27017/social-posts-manager'
 
     try {
       const mongooseInstance = await mongoose.connect(mongoUri)

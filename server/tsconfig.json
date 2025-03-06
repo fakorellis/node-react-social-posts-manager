@@ -12,6 +12,14 @@
       "esModuleInterop": true,
       "skipLibCheck": true,
       "forceConsistentCasingInFileNames": true
-    }
+    },
+    "exclude": [
+      "**/__tests__/**",
+      "**/*.test.ts",
+      "**/*.spec.ts",
+      "coverage",
+      "jest.config.js",
+      "jest.setup.ts"
+    ]
   }
   
