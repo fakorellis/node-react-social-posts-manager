@@ -8,7 +8,7 @@
 ### Node.js & Express.js – API Framework
 ### MongoDB – Database with optimized queries & indexing
 ### JWT Authentication – Secure token-based auth
-### Swagger (OpenAPI) – API documentation
+### Swagger (OpenAPI) – API documentation (http://localhost:4000/api-docs)
 ### In Memory Cache caching for performance
 ### Docker – Containerized for deployment consistency
 ## Frontend
@@ -45,4 +45,10 @@
 
 # Notes: Hardcoded values are used intentionally for easy setup instead of env vars 
 
+# 🛠️ Build Instructions
+## Docker and Docker Compose should be installed
+### git clone the project
+### docker-compose up
+### That's it !
+### ports used: 3000 for Front End, 4000 for Back End and 27018 for Mongo Db
 
