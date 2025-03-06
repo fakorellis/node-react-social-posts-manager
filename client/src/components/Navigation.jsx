@@ -1,9 +1,15 @@
-import { ListGroup, ListGroupItem } from "reactstrap";
+import { ListGroup, ListGroupItem, Button } from "reactstrap";
 import { NavLink } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Navigation = () => {
-  const location = useLocation(); // Get current route
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login"); // Redirect to login page
+  };
 
   return (
     <div className="p-3">
@@ -38,6 +44,9 @@ const Navigation = () => {
           Create Post
         </ListGroupItem>
       </ListGroup>
+      <Button color="danger" size="sm" className="mt-4 w-100" onClick={handleLogout}>
+        Logout
+      </Button>
     </div>
   );
 };

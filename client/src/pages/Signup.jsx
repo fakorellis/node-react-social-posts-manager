@@ -26,8 +26,8 @@ const Signup = () => {
     password: "",
   });
 
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState({ title: "", message: "" }); // Error state
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -36,7 +36,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
+    setError({ title: "", message: "" });
 
     try {
       const response = await axios.post(
@@ -47,7 +47,20 @@ const Signup = () => {
         navigate("/login"); // Redirect to login page after successful signup
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
+      const errorCode = err.response?.data?.errorCode;
+
+      if (errorCode) {
+        setError({
+          title: errorCode.userTitle || "Signup Error",
+          message:
+            errorCode.userMessage || "Something went wrong. Please try again.",
+        });
+      } else {
+        setError({
+          title: "Signup Failed",
+          message: "An unexpected error occurred. Please try again later.",
+        });
+      }
     } finally {
       setLoading(false);
     }
@@ -62,7 +75,13 @@ const Signup = () => {
               <CardBody className="p-4">
                 <h2 className="text-center mb-4">Sign Up</h2>
 
-                {error && <Alert color="danger">{error}</Alert>}
+                {error.title && (
+                  <Alert color="danger">
+                    <strong>{error.title}</strong>
+                    <br />
+                    {error.message}
+                  </Alert>
+                )}
 
                 <Form onSubmit={handleSubmit}>
                   <FormGroup>
