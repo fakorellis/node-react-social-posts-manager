@@ -17,6 +17,9 @@ class OpenApiService {
     const apiSpec = YAML.load(openApiPath)
 
     Object.entries(apiSpec.paths).forEach(([routePath, methods]) => {
+      // Convert {id} to :id for Express routes
+      const expressPath = routePath.replace(/{/g, ':').replace(/}/g, '')
+
       Object.entries(methods as Record<string, any>).forEach(([method, operation]) => {
         const operationId = operation.operationId
         const handlerDefinition = handlers[operationId]
@@ -36,7 +39,7 @@ class OpenApiService {
 
         // @ts-ignore
         app[expressMethod](
-          routePath,
+          expressPath,
           ...preOperationMiddlewares.map(
             (middleware) => (req: Request, res: Response, next: NextFunction) => middleware(req, res, next)
           ),
@@ -51,7 +54,6 @@ class OpenApiService {
           }
         )
 
-        console.log(`Registered route: [${method.toUpperCase()}] ${routePath}`)
       })
     })
   }

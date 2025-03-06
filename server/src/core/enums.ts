@@ -23,3 +23,11 @@ export enum LogLevel {
   ERROR = 'error',
   DEBUG = 'debug'
 }
+
+export enum HashKey {
+  USER_GET_LIKED_POSTS = 'USER__GET_LIKED_POSTS'
+}
+
+export const HashKeyTTL: Record<HashKey, number> = {
+  [HashKey.USER_GET_LIKED_POSTS]: 60 // Cache for 60 seconds
+}

@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import dotenv from 'dotenv'
 import cors from 'cors'
 import helmet from 'helmet'
+import { CacheService } from './services/cache/CacheService'
 import OpenApiService from './services/openapi/OpenApiService'
 import MongoDBService from './services/mongodb/MongoDBService'
 import PostService from './core/services/PostService'
@@ -27,6 +28,7 @@ async function startServer() {
     await PostService.fetchPostsFromApi()
     OpenApiService.setupRoutes(app)
     OpenApiService.setupSwaggerDocs(app)
+    CacheService.initCache()
 
     const PORT = process.env.PORT || 4000
     app.listen(PORT, () => {
